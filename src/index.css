@@ -1,0 +1,241 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Elite Investment Management - Premium Dark Theme with Gold Accents */
+
+@layer base {
+  :root {
+    /* Premium Dark Navy Theme */
+    --background: 222 47% 6%;
+    --foreground: 210 40% 98%;
+
+    --card: 222 47% 8%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222 47% 8%;
+    --popover-foreground: 210 40% 98%;
+
+    /* Gold accent for primary */
+    --primary: 45 93% 47%;
+    --primary-foreground: 222 47% 6%;
+
+    --secondary: 222 47% 12%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 222 47% 15%;
+    --muted-foreground: 215 20% 65%;
+
+    --accent: 222 47% 15%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 222 47% 18%;
+    --input: 222 47% 15%;
+    --ring: 45 93% 47%;
+
+    --radius: 0.75rem;
+
+    /* Custom colors */
+    --gold: 45 93% 47%;
+    --gold-light: 45 93% 60%;
+    --gold-dark: 45 93% 35%;
+    --navy: 222 47% 6%;
+    --navy-light: 222 47% 12%;
+    --navy-lighter: 222 47% 18%;
+
+    /* Glassmorphism */
+    --glass-bg: 222 47% 10%;
+    --glass-border: 222 47% 25%;
+
+    --sidebar-background: 222 47% 8%;
+    --sidebar-foreground: 210 40% 98%;
+    --sidebar-primary: 45 93% 47%;
+    --sidebar-primary-foreground: 222 47% 6%;
+    --sidebar-accent: 222 47% 15%;
+    --sidebar-accent-foreground: 210 40% 98%;
+    --sidebar-border: 222 47% 18%;
+    --sidebar-ring: 45 93% 47%;
+  }
+
+  .dark {
+    --background: 222 47% 6%;
+    --foreground: 210 40% 98%;
+
+    --card: 222 47% 8%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222 47% 8%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 45 93% 47%;
+    --primary-foreground: 222 47% 6%;
+
+    --secondary: 222 47% 12%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 222 47% 15%;
+    --muted-foreground: 215 20% 65%;
+
+    --accent: 222 47% 15%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62% 30%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 222 47% 18%;
+    --input: 222 47% 15%;
+    --ring: 45 93% 47%;
+
+    --sidebar-background: 222 47% 8%;
+    --sidebar-foreground: 210 40% 98%;
+    --sidebar-primary: 45 93% 47%;
+    --sidebar-primary-foreground: 222 47% 6%;
+    --sidebar-accent: 222 47% 15%;
+    --sidebar-accent-foreground: 210 40% 98%;
+    --sidebar-border: 222 47% 18%;
+    --sidebar-ring: 45 93% 47%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply bg-card/50 backdrop-blur-xl border border-border/50 shadow-xl;
+  }
+
+  .gold-gradient {
+    background: linear-gradient(135deg, hsl(var(--gold)) 0%, hsl(var(--gold-light)) 50%, hsl(var(--gold)) 100%);
+  }
+
+  .gold-text {
+    background: linear-gradient(135deg, hsl(var(--gold)) 0%, hsl(var(--gold-light)) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .navy-gradient {
+    background: linear-gradient(180deg, hsl(var(--navy)) 0%, hsl(var(--navy-light)) 100%);
+  }
+
+  .hero-gradient {
+    background: radial-gradient(ellipse at top, hsl(var(--navy-light)) 0%, hsl(var(--navy)) 70%);
+  }
+
+  .glow-gold {
+    box-shadow: 0 0 40px hsl(var(--gold) / 0.3), 0 0 80px hsl(var(--gold) / 0.1);
+  }
+
+  .hover-glow {
+    @apply transition-all duration-300;
+  }
+
+  .hover-glow:hover {
+    box-shadow: 0 0 30px hsl(var(--gold) / 0.2);
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .animate-pulse-slow {
+    animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  .animate-ticker {
+    animation: ticker 30s linear infinite;
+  }
+
+  .animate-morph-blob {
+    animation: morph-blob 30s ease-in-out infinite;
+  }
+
+  .animate-morph-blob-delayed {
+    animation: morph-blob 35s ease-in-out infinite;
+    animation-delay: 5s;
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes ticker {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes morph-blob {
+  0%, 100% {
+    transform: scale(1) translate(0, 0);
+  }
+  25% {
+    transform: scale(1.1) translate(20px, -15px);
+  }
+  50% {
+    transform: scale(0.9) translate(-10px, 25px);
+  }
+  75% {
+    transform: scale(1.05) translate(-20px, -10px);
+  }
+}
+
+@keyframes border-glow-move {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
+}
+
+.moving-border-glow-gold {
+  background-image: linear-gradient(rgba(3, 11, 34, 0.8), rgba(3, 11, 34, 0.6)), linear-gradient(90deg, rgba(212, 175, 55, 0.1) 0%, rgba(212, 175, 55, 0.7) 50%, rgba(212, 175, 55, 0.1) 100%);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+  border: 1px solid transparent;
+  background-size: 100% 100%, 200% 100%;
+  animation: border-glow-move 6s linear infinite;
+  box-shadow: 0 30px 70px rgba(3, 11, 34, 0.9), 0 0 40px rgba(212, 175, 55, 0.08), inset 0 1px 1px rgba(255, 255, 255, 0.05);
+}
+
+.moving-border-glow-nav {
+  background-image: linear-gradient(135deg, rgba(3, 11, 34, 0.95) 0%, rgba(212, 175, 55, 0.05) 50%, rgba(3, 11, 34, 0.95) 100%), linear-gradient(90deg, rgba(212, 175, 55, 0.05) 0%, rgba(212, 175, 55, 0.45) 50%, rgba(212, 175, 55, 0.05) 100%);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+  border: 1px solid transparent;
+  background-size: 100% 100%, 200% 100%;
+  animation: border-glow-move 8s linear infinite;
+  box-shadow: 0 20px 50px rgba(3, 11, 34, 0.95), 0 0 35px rgba(212, 175, 55, 0.06), inset 0 1px 1px rgba(255, 255, 255, 0.03);
+}

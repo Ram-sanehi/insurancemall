@@ -5,6 +5,7 @@ import { Footer } from "@/components/Footer";
 const TermsOfService = () => (
   <div className="min-h-screen bg-background">
     <Navbar />
+    <main>
     <section className="py-28 md:py-36 hero-gradient relative overflow-hidden border-b border-border/10">
       <div className="container mx-auto px-4 relative z-10">
         <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} className="max-w-3xl mx-auto text-center space-y-6">
@@ -34,6 +35,7 @@ const TermsOfService = () => (
         </div>
       </div>
     </section>
+    </main>
     <Footer />
   </div>
 );

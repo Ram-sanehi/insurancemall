@@ -128,6 +128,7 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
+      <main>
       <Hero />
 
       {/* Insurance Offerings Grid */}
@@ -425,6 +426,7 @@ const Index = () => {
       </section>
 
       <CTA />
+      </main>
       <Footer />
     </div>
   );

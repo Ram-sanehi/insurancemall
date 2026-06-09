@@ -82,7 +82,7 @@ export function Footer() {
           >
             <Link to="/" className="flex items-center gap-3">
               <div className="w-11 h-11 rounded-full overflow-hidden flex items-center justify-center shadow-lg border border-primary/30">
-                <img src="/logo-circular1.png" alt="Insurance Mall" width="44" height="44" className="w-full h-full object-cover" />
+                <img src="/logo-circular1.png" alt="Insurance Mall" width="44" height="44" className="w-full h-full object-cover" loading="lazy" decoding="async" />
               </div>
               <div>
                 <h3 className="text-[11px] font-display font-extrabold gold-text leading-tight uppercase tracking-[0.2em]">
@@ -273,7 +273,7 @@ export function Footer() {
       </div>
 
       {/* Bottom bar */}
-      <div className="border-t border-border/10 bg-[#01040f] py-8">
+      <div className="border-t border-border/10 bg-[#01040f] py-8 pb-14">
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] font-semibold uppercase tracking-[0.15em] text-muted-foreground/75">
             <p>© 2026 Insurance Mall — A Unit of Alpha Investment Management. All rights reserved.</p>

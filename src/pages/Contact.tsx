@@ -227,7 +227,7 @@ const ContactPage = () => {
                 <div className="grid grid-cols-2 gap-3.5 pt-1">
                   {[
                     "SEBI Registered Unit",
-                    "20+ Insurance Partners",
+                    "40+ Insurance Partners",
                     "3,000+ Families Covered",
                     "100% Transparent Process",
                   ].map((badge) => (
@@ -303,7 +303,7 @@ const ContactPage = () => {
                     <span className="w-1.5 h-1.5 rounded-full bg-primary" /> Best Fit Match
                   </h4>
                   <p className="text-[10px] text-muted-foreground/85 leading-relaxed font-light">
-                    We compare 20+ insurance partners to find the most suitable plan for your budget and needs.
+                    We compare 40+ insurance partners to find the most suitable plan for your budget and needs.
                   </p>
                 </div>
                 <div className="space-y-1 border-t sm:border-t-0 sm:border-l border-border/10 pt-3 sm:pt-0 sm:pl-4">

@@ -22,7 +22,7 @@ const AboutPage = () => {
               About <span className="gold-text">Insurance Mall</span>
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground/90 max-w-2xl mx-auto font-light leading-relaxed">
-              A Unit of Alpha Investment Management — Your trusted insurance advisory partner providing comprehensive protection solutions since 2014.
+              A Unit of Alpha Investment Management — Your trusted insurance advisory partner providing comprehensive protection solutions since 2019.
             </p>
           </motion.div>
         </div>
@@ -40,7 +40,7 @@ const AboutPage = () => {
               <div className="h-[2px] w-20 bg-primary/50 rounded" />
               <div className="space-y-6 text-muted-foreground/90 text-base md:text-lg font-light leading-relaxed">
                 <p>Insurance Mall is the dedicated insurance advisory division of Alpha Investment Management, established to provide comprehensive, unbiased insurance guidance to individuals, families, and businesses.</p>
-                <p>With over a decade of experience in financial services, our team understands that insurance is not merely a financial product — it is a protection strategy. We help clients identify risks, bridge coverage gaps, and select suitable insurance solutions from leading providers.</p>
+                <p>With 7+ years of experience in financial services, our team understands that insurance is not merely a financial product — it is a protection strategy. We help clients identify risks, bridge coverage gaps, and select suitable insurance solutions from leading providers.</p>
                 <p>As a unit of Alpha Investment Management, a SEBI Registered Investment Advisor (INA000017348), we bring the same fiduciary commitment and institutional-grade expertise to insurance advisory that has earned the trust of over 3000 clients across India.</p>
               </div>
             </motion.div>
@@ -54,10 +54,10 @@ const AboutPage = () => {
         <div className="container mx-auto px-4 relative z-10">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
             {[
-              { val: "10+", label: "Years Experience", icon: Award },
+              { val: "7+", label: "Years Experience", icon: Award },
               { val: "3000+", label: "Families Protected", icon: Users },
-              { val: "20+", label: "Insurance Partners", icon: Building2 },
-              { val: "9", label: "Insurance Categories", icon: Shield },
+              { val: "40+", label: "Insurance Partners", icon: Building2 },
+              { val: "9+", label: "Insurance Categories", icon: Shield },
             ].map((stat, i) => {
               const Icon = stat.icon;
               return (
@@ -113,10 +113,10 @@ const AboutPage = () => {
                 "Backed by SEBI Registered Investment Advisor",
                 "Objective, product-agnostic insurance guidance",
                 "Comprehensive coverage analysis and gap identification",
-                "Access to 20+ leading insurance partners",
+                "Access to 40+ leading insurance partners",
                 "Dedicated claims assistance and support",
                 "Regular policy reviews and updates",
-                "Experienced team with 10+ years in financial services",
+                "Experienced team with 7+ years in financial services",
                 "Same office, same team — seamless integration with wealth management",
               ].map((benefit, i) => (
                 <motion.div key={i} initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.05 }}
@@ -148,7 +148,7 @@ const AboutPage = () => {
                 </div>
               </div>
               <p className="text-muted-foreground/80 text-sm leading-relaxed font-light mb-4">
-                Alpha Investment Management is a SEBI Registered Investment Advisor (Registration No: INA000017348) providing comprehensive wealth management, financial planning, and investment advisory services since 2014. Insurance Mall operates as its dedicated insurance advisory division.
+                Alpha Investment Management is a SEBI Registered Investment Advisor (Registration No: INA000017348) providing comprehensive wealth management, financial planning, and investment advisory services since 2019. Insurance Mall operates as its dedicated insurance advisory division.
               </p>
               <a href="https://alphaaim.in" className="inline-flex items-center gap-2 text-primary text-xs font-semibold uppercase tracking-wider hover:gap-3 transition-all duration-300">
                 Visit Alpha Investment Management →

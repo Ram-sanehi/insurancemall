@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Shield,
   Car,
@@ -12,6 +12,7 @@ import {
   Building2,
   Check,
   ArrowRight,
+  ChevronDown,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -84,7 +85,7 @@ const keyBenefits = [
   },
   {
     title: "Best-in-Class Insurance Products",
-    description: "Access to carefully selected insurance solutions from leading insurance providers.",
+    description: "Access to carefully selected insurance solutions from 40+ leading insurance providers across life, health, and general segments.",
   },
   {
     title: "Claims Assistance Support",
@@ -98,6 +99,10 @@ const keyBenefits = [
     title: "Family Protection Planning",
     description: "Structured protection strategies covering health, income replacement, education goals, retirement needs.",
   },
+  {
+    title: "IRDA Licensed Advisory",
+    description: "All insurance recommendations are made by IRDA-approved advisors, ensuring full regulatory compliance and client-first transparency.",
+  },
 ];
 
 const processSteps = [
@@ -109,9 +114,23 @@ const processSteps = [
 ];
 
 const partners = {
-  life: ["LIC", "HDFC Life", "ICICI Prudential Life", "SBI Life", "Max Life", "Tata AIA", "Bajaj Allianz Life"],
-  general: ["ICICI Lombard", "HDFC ERGO", "Bajaj Allianz General", "Tata AIG", "Reliance General", "SBI General", "New India Assurance"],
-  health: ["Star Health", "Care Health Insurance", "Niva Bupa", "Aditya Birla Health", "ManipalCigna"],
+  life: [
+    "LIC", "HDFC Life", "ICICI Prudential Life", "SBI Life", "Axis Max Life",
+    "Tata AIA", "Bajaj Allianz Life", "Kotak Life", "PNB MetLife",
+    "Canara HSBC Life", "Edelweiss Life", "Pramerica Life", "Future Generali Life",
+    "Ageas Federal Life", "IndiaFirst Life",
+  ],
+  general: [
+    "ICICI Lombard", "HDFC ERGO", "Bajaj Allianz General", "Tata AIG",
+    "Reliance General", "SBI General", "New India Assurance", "United India Insurance",
+    "National Insurance", "Oriental Insurance", "Cholamandalam MS", "Future Generali General",
+    "Royal Sundaram", "Shriram General", "Acko General",
+  ],
+  health: [
+    "Star Health", "Care Health Insurance", "Niva Bupa", "Aditya Birla Health",
+    "ManipalCigna", "Reliance Health", "HDFC ERGO Health", "ICICI Lombard Health",
+    "Bajaj Allianz Health", "SBI Health Insurance",
+  ],
 };
 
 const faqItems = [
@@ -124,6 +143,28 @@ const faqItems = [
 
 const Index = () => {
   const [expandedFaq, setExpandedFaq] = useState<number | null>(null);
+  const [expandedPartner, setExpandedPartner] = useState<number | null>(null);
+
+  const partnerCategories = [
+    {
+      title: "Life Insurance Partners",
+      description: "Leading life insurance companies offering term, ULIP, and savings plans",
+      icon: Shield,
+      list: partners.life,
+    },
+    {
+      title: "General Insurance Partners",
+      description: "Trusted general insurers covering vehicle, travel, property, and commercial risks",
+      icon: Building2,
+      list: partners.general,
+    },
+    {
+      title: "Health Insurance Partners",
+      description: "Top health insurers providing individual, family floater, and critical illness plans",
+      icon: Heart,
+      list: partners.health,
+    },
+  ];
 
   return (
     <div className="min-h-screen bg-background">
@@ -150,7 +191,7 @@ const Index = () => {
           </motion.div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {insuranceOfferings.map((offering, index) => {
+            {insuranceOfferings.slice(0, 3).map((offering, index) => {
               const Icon = offering.icon;
               return (
                 <motion.div
@@ -193,6 +234,20 @@ const Index = () => {
               );
             })}
           </div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mt-16"
+          >
+            <Link
+              to="/services"
+              className="inline-flex items-center gap-2 px-8 py-4 rounded-xl gold-gradient text-primary-foreground text-sm font-semibold uppercase tracking-wider hover:opacity-95 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 shadow-md"
+            >
+              View All Insurance Products <ArrowRight className="h-4 w-4" />
+            </Link>
+          </motion.div>
         </div>
       </section>
 
@@ -306,68 +361,89 @@ const Index = () => {
               </h2>
               <div className="h-[2px] w-20 bg-primary/50 rounded mx-auto mb-6" />
               <p className="text-muted-foreground/90 text-base md:text-lg leading-relaxed font-light max-w-2xl mx-auto">
-                We collaborate with leading insurance providers to deliver reliable protection solutions across life, health, motor, travel, property, and business insurance segments.
+                We collaborate with 40+ leading insurance providers to deliver reliable protection solutions across life, health, motor, travel, property, and business insurance segments.
               </p>
             </motion.div>
 
-            {/* Life Insurance Partners */}
-            <div className="space-y-4">
-              <h3 className="text-sm font-semibold text-foreground">Life Insurance Partners</h3>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                {partners.life.map((partner, index) => (
+            <div className="space-y-6">
+              {partnerCategories.map((category, index) => {
+                const isExpanded = expandedPartner === index;
+                const Icon = category.icon;
+                return (
                   <motion.div
-                    key={index}
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
+                    key={category.title}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    transition={{ delay: index * 0.04 }}
-                    className="glass-card rounded-2xl p-4 text-center border border-transparent hover-glow hover:border-primary/40 transition-all duration-300 group shadow-md relative overflow-hidden"
+                    transition={{ delay: index * 0.05, duration: 0.5 }}
+                    className={`glass-card rounded-2xl overflow-hidden border transition-all duration-300 relative group ${
+                      isExpanded
+                        ? "border-primary/30 bg-gradient-to-b from-slate-900/40 via-slate-950/20 to-slate-950/10 shadow-lg shadow-primary/[0.02]"
+                        : "border-border/30 hover:border-primary/20 hover:-translate-y-[2px] bg-slate-950/20 shadow-sm"
+                    }`}
                   >
+                    {/* Bottom border animation */}
                     <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[2.5px] bg-primary group-hover:w-full transition-all duration-500 z-10" />
-                    <p className="text-xs font-semibold text-foreground">{partner}</p>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
 
-            {/* General Insurance Partners */}
-            <div className="space-y-4">
-              <h3 className="text-sm font-semibold text-foreground">General Insurance Partners</h3>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                {partners.general.map((partner, index) => (
-                  <motion.div
-                    key={index}
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: index * 0.04 }}
-                    className="glass-card rounded-2xl p-4 text-center border border-transparent hover-glow hover:border-primary/40 transition-all duration-300 group shadow-md relative overflow-hidden"
-                  >
-                    <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[2.5px] bg-primary group-hover:w-full transition-all duration-500 z-10" />
-                    <p className="text-xs font-semibold text-foreground">{partner}</p>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
+                    {/* Accordion Header */}
+                    <button
+                      onClick={() => setExpandedPartner(isExpanded ? null : index)}
+                      className="w-full p-4 md:p-8 flex items-center gap-4 md:gap-6 text-left transition-colors relative group"
+                    >
+                      {isExpanded && (
+                        <div className="absolute inset-0 bg-gradient-to-r from-primary/[0.03] to-transparent pointer-events-none" />
+                      )}
+                      <div className="w-14 h-14 rounded-2xl border border-primary/20 bg-primary/5 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform duration-300 shadow-[0_0_15px_rgba(218,165,32,0.03)]">
+                        <Icon className="h-6 w-6 text-primary" />
+                      </div>
+                      <div className="flex-1 space-y-1">
+                        <h3 className="text-lg md:text-xl font-bold font-display text-foreground group-hover:text-primary transition-colors duration-300">
+                          {category.title}
+                        </h3>
+                        <p className="text-muted-foreground/85 text-xs md:text-sm font-light leading-relaxed">
+                          {category.description}
+                        </p>
+                      </div>
+                      <div className="w-9 h-9 rounded-full border border-border/50 flex items-center justify-center shrink-0 group-hover:border-primary/45 transition-colors">
+                        <ChevronDown
+                          className={`h-4 w-4 text-muted-foreground group-hover:text-primary transition-transform duration-300 ${
+                            isExpanded ? "rotate-180 text-primary" : ""
+                          }`}
+                        />
+                      </div>
+                    </button>
 
-            {/* Health Insurance Partners */}
-            <div className="space-y-4">
-              <h3 className="text-sm font-semibold text-foreground">Health Insurance Partners</h3>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                {partners.health.map((partner, index) => (
-                  <motion.div
-                    key={index}
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: index * 0.04 }}
-                    className="glass-card rounded-2xl p-4 text-center border border-transparent hover-glow hover:border-primary/40 transition-all duration-300 group shadow-md relative overflow-hidden"
-                  >
-                    <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[2.5px] bg-primary group-hover:w-full transition-all duration-500 z-10" />
-                    <p className="text-xs font-semibold text-foreground">{partner}</p>
+                    {/* Expanded Partner Chips */}
+                    <AnimatePresence>
+                      {isExpanded && (
+                        <motion.div
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: "auto" }}
+                          exit={{ opacity: 0, height: 0 }}
+                          transition={{ duration: 0.35, ease: "easeInOut" }}
+                          className="overflow-hidden border-t border-border/10 bg-[#02050c]/25"
+                        >
+                          <div className="p-6 md:p-8">
+                            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+                              {category.list.map((partner, i) => (
+                                <motion.div
+                                  key={partner}
+                                  initial={{ opacity: 0, scale: 0.95 }}
+                                  animate={{ opacity: 1, scale: 1 }}
+                                  transition={{ delay: i * 0.02 }}
+                                  className="w-full h-12 flex items-center justify-center px-4 rounded-xl bg-[#030712]/50 border border-border/40 hover:border-primary/30 hover:bg-primary/[0.02] hover:text-primary transition-all duration-300 text-center font-light tracking-wide text-xs text-muted-foreground/85 cursor-default shadow-sm"
+                                >
+                                  {partner}
+                                </motion.div>
+                              ))}
+                            </div>
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
                   </motion.div>
-                ))}
-              </div>
+                );
+              })}
             </div>
           </div>
         </div>
@@ -394,13 +470,7 @@ const Index = () => {
               {faqItems.map((item, index) => {
                 const isExpanded = expandedFaq === index;
                 return (
-                  <motion.div
-                    key={index}
-                    initial={{ opacity: 0, y: 12 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: index * 0.05 }}
-                  >
+                  <div key={index}>
                     <button
                       onClick={() => setExpandedFaq(isExpanded ? null : index)}
                       className="w-full py-4 flex items-center justify-between gap-3 text-left group hover:text-primary transition-colors"
@@ -417,7 +487,7 @@ const Index = () => {
                         </p>
                       </div>
                     )}
-                  </motion.div>
+                  </div>
                 );
               })}
             </div>

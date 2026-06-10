@@ -17,86 +17,96 @@ export function Hero() {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  // Canvas particle system
+  // Canvas particle system — deferred 500ms so it doesn't block LCP
   useEffect(() => {
     const isMobile = window.innerWidth < 768;
     if (isMobile) return;
 
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-
     let animationFrameId: number;
-    let width = (canvas.width = window.innerWidth);
-    let height = (canvas.height = window.innerHeight);
+    let timeoutId: ReturnType<typeof setTimeout>;
 
-    const handleResize = () => {
-      if (canvas) {
-        width = canvas.width = window.innerWidth;
-        height = canvas.height = window.innerHeight;
+    timeoutId = setTimeout(() => {
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return;
+
+      let width = (canvas.width = window.innerWidth);
+      let height = (canvas.height = window.innerHeight);
+
+      const handleResize = () => {
+        if (canvas) {
+          width = canvas.width = window.innerWidth;
+          height = canvas.height = window.innerHeight;
+        }
+      };
+      window.addEventListener("resize", handleResize);
+
+      const colors = ["#fbbf24", "#f59e0b", "#fef08a", "#d4af37", "#fef9c3"];
+      // Reduced from 100 → 60 particles to lower main-thread load
+      const particles: Array<{
+        x: number;
+        y: number;
+        size: number;
+        speedX: number;
+        speedY: number;
+        opacity: number;
+        fadeSpeed: number;
+        color: string;
+      }> = [];
+
+      for (let i = 0; i < 60; i++) {
+        particles.push({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          size: Math.random() * 2.4 + 0.8,
+          speedX: (Math.random() - 0.5) * 0.4,
+          speedY: (Math.random() - 0.5) * 0.4,
+          opacity: Math.random() * 0.6 + 0.1,
+          fadeSpeed: (Math.random() - 0.5) * 0.002,
+          color: colors[Math.floor(Math.random() * colors.length)]
+        });
       }
-    };
-    window.addEventListener("resize", handleResize);
 
-    const colors = ["#fbbf24", "#f59e0b", "#fef08a", "#d4af37", "#fef9c3"];
-    const particles: Array<{
-      x: number;
-      y: number;
-      size: number;
-      speedX: number;
-      speedY: number;
-      opacity: number;
-      fadeSpeed: number;
-      color: string;
-    }> = [];
+      const draw = () => {
+        ctx.clearRect(0, 0, width, height);
+        particles.forEach((p) => {
+          p.speedX += (Math.random() - 0.5) * 0.015;
+          p.speedY += (Math.random() - 0.5) * 0.015;
+          const limit = 0.6;
+          p.speedX = Math.max(-limit, Math.min(limit, p.speedX));
+          p.speedY = Math.max(-limit, Math.min(limit, p.speedY));
+          p.x += p.speedX;
+          p.y += p.speedY;
+          p.opacity += p.fadeSpeed;
+          if (p.opacity <= 0.05 || p.opacity >= 0.8) p.fadeSpeed = -p.fadeSpeed;
+          if (p.x < 0) p.x = width;
+          if (p.x > width) p.x = 0;
+          if (p.y < 0) p.y = height;
+          if (p.y > height) p.y = 0;
+          ctx.save();
+          ctx.globalAlpha = p.opacity;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+          ctx.fillStyle = p.color;
+          ctx.shadowBlur = 8;
+          ctx.shadowColor = p.color;
+          ctx.fill();
+          ctx.restore();
+        });
+        animationFrameId = requestAnimationFrame(draw);
+      };
 
-    for (let i = 0; i < 100; i++) {
-      particles.push({
-        x: Math.random() * width,
-        y: Math.random() * height,
-        size: Math.random() * 2.4 + 0.8,
-        speedX: (Math.random() - 0.5) * 0.4,
-        speedY: (Math.random() - 0.5) * 0.4,
-        opacity: Math.random() * 0.6 + 0.1,
-        fadeSpeed: (Math.random() - 0.5) * 0.002,
-        color: colors[Math.floor(Math.random() * colors.length)]
-      });
-    }
+      draw();
 
-    const draw = () => {
-      ctx.clearRect(0, 0, width, height);
-      particles.forEach((p) => {
-        p.speedX += (Math.random() - 0.5) * 0.015;
-        p.speedY += (Math.random() - 0.5) * 0.015;
-        const limit = 0.6;
-        p.speedX = Math.max(-limit, Math.min(limit, p.speedX));
-        p.speedY = Math.max(-limit, Math.min(limit, p.speedY));
-        p.x += p.speedX;
-        p.y += p.speedY;
-        p.opacity += p.fadeSpeed;
-        if (p.opacity <= 0.05 || p.opacity >= 0.8) p.fadeSpeed = -p.fadeSpeed;
-        if (p.x < 0) p.x = width;
-        if (p.x > width) p.x = 0;
-        if (p.y < 0) p.y = height;
-        if (p.y > height) p.y = 0;
-        ctx.save();
-        ctx.globalAlpha = p.opacity;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fillStyle = p.color;
-        ctx.shadowBlur = 10;
-        ctx.shadowColor = p.color;
-        ctx.fill();
-        ctx.restore();
-      });
-      animationFrameId = requestAnimationFrame(draw);
-    };
-
-    draw();
+      return () => {
+        window.removeEventListener("resize", handleResize);
+        cancelAnimationFrame(animationFrameId);
+      };
+    }, 500); // defer 500ms — let LCP render first
 
     return () => {
-      window.removeEventListener("resize", handleResize);
+      clearTimeout(timeoutId);
       cancelAnimationFrame(animationFrameId);
     };
   }, []);
@@ -144,23 +154,20 @@ export function Hero() {
           </linearGradient>
         </defs>
 
+
+        {/* Gold wave paths — CSS animated (GPU, off main thread) instead of framer-motion */}
         {!isMobileScreen && (
           <>
-            <motion.path d="M -150,300 C 250,550 550,200 1350,220" fill="none" stroke="url(#gold-thread-1)" strokeWidth="0.8"
-              animate={{ d: ["M -150,300 C 250,550 550,200 1350,220", "M -150,280 C 220,570 580,170 1350,200", "M -150,300 C 250,550 550,200 1350,220"] }}
-              transition={{ duration: 32, repeat: Infinity, ease: "easeInOut" }} />
-            <motion.path d="M -150,320 C 230,520 570,220 1350,190" fill="none" stroke="url(#gold-thread-2)" strokeWidth="0.6"
-              animate={{ d: ["M -150,320 C 230,520 570,220 1350,190", "M -150,340 C 260,500 540,240 1350,210", "M -150,320 C 230,520 570,220 1350,190"] }}
-              transition={{ duration: 28, repeat: Infinity, ease: "easeInOut", delay: 1 }} />
-            <motion.path d="M -150,280 C 270,580 530,180 1350,250" fill="none" stroke="url(#gold-thread-3)" strokeWidth="0.5"
-              animate={{ d: ["M -150,280 C 270,580 530,180 1350,250", "M -150,290 C 240,590 560,150 1350,230", "M -150,280 C 270,580 530,180 1350,250"] }}
-              transition={{ duration: 36, repeat: Infinity, ease: "easeInOut", delay: 2 }} />
-            <motion.path d="M -150,350 C 200,480 600,250 1350,160" fill="none" stroke="url(#gold-thread-1)" strokeWidth="0.5"
-              animate={{ d: ["M -150,350 C 200,480 600,250 1350,160", "M -150,330 C 210,490 590,230 1350,180", "M -150,350 C 200,480 600,250 1350,160"] }}
-              transition={{ duration: 30, repeat: Infinity, ease: "easeInOut", delay: 1.5 }} />
-            <motion.path d="M -150,250 C 300,600 500,120 1350,280" fill="none" stroke="url(#gold-thread-2)" strokeWidth="0.4"
-              animate={{ d: ["M -150,250 C 300,600 500,120 1350,280", "M -150,270 C 280,590 520,130 1350,260", "M -150,250 C 300,600 500,120 1350,280"] }}
-              transition={{ duration: 40, repeat: Infinity, ease: "easeInOut", delay: 3 }} />
+            <path d="M -150,300 C 250,550 550,200 1350,220" fill="none" stroke="url(#gold-thread-1)" strokeWidth="0.8"
+              style={{ animation: "goldWave1 32s ease-in-out infinite" }} />
+            <path d="M -150,320 C 230,520 570,220 1350,190" fill="none" stroke="url(#gold-thread-2)" strokeWidth="0.6"
+              style={{ animation: "goldWave2 28s ease-in-out infinite 1s" }} />
+            <path d="M -150,280 C 270,580 530,180 1350,250" fill="none" stroke="url(#gold-thread-3)" strokeWidth="0.5"
+              style={{ animation: "goldWave1 36s ease-in-out infinite 2s" }} />
+            <path d="M -150,350 C 200,480 600,250 1350,160" fill="none" stroke="url(#gold-thread-1)" strokeWidth="0.5"
+              style={{ animation: "goldWave2 30s ease-in-out infinite 1.5s" }} />
+            <path d="M -150,250 C 300,600 500,120 1350,280" fill="none" stroke="url(#gold-thread-2)" strokeWidth="0.4"
+              style={{ animation: "goldWave1 40s ease-in-out infinite 3s" }} />
           </>
         )}
         {isMobileScreen && (
@@ -170,6 +177,8 @@ export function Hero() {
             <path d="M -150,280 C 270,580 530,180 1350,250" fill="none" stroke="url(#gold-thread-3)" strokeWidth="0.5" />
           </>
         )}
+
+
 
         {/* Fanned curved lines behind right side card */}
         {Array.from({ length: 32 }).map((_, i) => {
@@ -225,17 +234,17 @@ export function Hero() {
                 <ShieldCheck className="h-4 w-4 text-primary" />
                 <span className="font-semibold text-foreground">Trusted by 3000+ Families</span>
                 <span className="w-1 h-1 rounded-full bg-border/40" />
-                <span className="font-semibold text-foreground">20+ Insurance Partners</span>
+                <span className="font-semibold text-foreground">40+ Insurance Partners</span>
               </div>
             </div>
 
             {/* Trust Cards */}
             <div className="grid grid-cols-2 gap-4 max-w-[380px] pt-2">
               {[
-                { val: "9", label: "Insurance Types", icon: Shield },
-                { val: "20+", label: "Partner Companies", icon: Building2 },
+                { val: "9+", label: "Insurance Types", icon: Shield },
+                { val: "40+", label: "Partner Companies", icon: Building2 },
                 { val: "3000+", label: "Families Protected", icon: Users },
-                { val: "10+", label: "Years Experience", icon: Award },
+                { val: "7+", label: "Years Experience", icon: Award },
               ].map((item, idx) => {
                 const IconComponent = item.icon;
                 return (

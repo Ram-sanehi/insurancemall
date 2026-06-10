@@ -1,18 +1,25 @@
-import { useEffect } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Index from "./pages/Index";
-import About from "./pages/About";
-import Services from "./pages/Services";
-import Contact from "./pages/Contact";
-import PrivacyPolicy from "./pages/PrivacyPolicy";
-import TermsOfService from "./pages/TermsOfService";
-import Disclaimer from "./pages/Disclaimer";
-import NotFound from "./pages/NotFound";
+
+// Route-level code splitting — each page is its own JS chunk
+const Index = lazy(() => import("./pages/Index"));
+const About = lazy(() => import("./pages/About"));
+const Services = lazy(() => import("./pages/Services"));
+const Contact = lazy(() => import("./pages/Contact"));
+const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
+const TermsOfService = lazy(() => import("./pages/TermsOfService"));
+const Disclaimer = lazy(() => import("./pages/Disclaimer"));
+const NotFound = lazy(() => import("./pages/NotFound"));
+
+// Minimal fallback — no spinner to avoid layout shift
+const PageFallback = () => (
+  <div style={{ minHeight: "100vh", background: "#030B22" }} aria-hidden="true" />
+);
 
 const queryClient = new QueryClient();
 
@@ -29,7 +36,7 @@ function ScrollToTop() {
 
 function AppRoutes() {
   return (
-    <>
+    <Suspense fallback={<PageFallback />}>
       <ScrollToTop />
       <Routes>
         <Route path="/" element={<Index />} />
@@ -41,7 +48,7 @@ function AppRoutes() {
         <Route path="/disclaimer" element={<Disclaimer />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
-    </>
+    </Suspense>
   );
 }
 
